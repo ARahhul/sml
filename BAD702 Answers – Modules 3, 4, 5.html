@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BAD702 Answers – Modules 3, 4, 5</title>
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#d9d9d4;--red:#b3261e;--soft:#f6f6f3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151515;--fg:#ececec;--mut:#aaa;--line:#3a3a3a;--red:#ff8a80;--soft:#202020}}
+:root[data-theme="dark"]{--bg:#151515;--fg:#ececec;--mut:#aaa;--line:#3a3a3a;--red:#ff8a80;--soft:#202020}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,"Times New Roman",serif}
+main{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:1.5rem;margin:.2em 0}
+.sub{color:var(--mut);margin:0 0 16px;font-size:.95rem}
+nav{display:flex;gap:8px;border-bottom:2px solid var(--fg);margin-bottom:14px;flex-wrap:wrap}
+nav button{font:inherit;background:none;color:var(--fg);border:1px solid var(--line);border-bottom:0;padding:8px 14px;cursor:pointer;border-radius:4px 4px 0 0}
+nav button[aria-selected=true]{background:var(--fg);color:var(--bg)}
+nav button:focus-visible,summary:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+section[hidden]{display:none}
+details{border-bottom:1px solid var(--line);padding:6px 0}
+summary{cursor:pointer;font-weight:bold;padding:8px 0;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--red)}
+details[open]>summary::before{content:"▾ "}
+.q{color:var(--red);margin-right:6px}
+h3{font-size:1rem;margin:14px 0 4px;border-left:3px solid var(--red);padding-left:8px}
+p{margin:6px 0}ul,ol{margin:6px 0;padding-left:22px}
+.ex{background:var(--soft);border-left:3px solid var(--mut);padding:8px 12px;margin:10px 0}
+.f{text-align:center;font-style:italic;margin:8px 0}
+.t{overflow-x:auto}
+table{border-collapse:collapse;margin:8px 0;font-size:.93rem;min-width:100%}
+th,td{border:1px solid var(--line);padding:5px 9px;text-align:left}th{background:var(--soft)}
+svg{display:block;margin:10px auto;max-width:100%;height:auto;color:var(--fg)}
+svg text{fill:var(--fg);font:12px Georgia,serif}
+</style></head><body><main>
+<h1>BAD702 – Statistical Machine Learning for Data Science</h1>
+<p class="sub">Modules 3, 4 and 5 · written as 15-mark exam answers in simple language · tap a question to open or close it</p>
+<nav role="tablist"><button role="tab" aria-selected="true" data-m="m3">Module 3</button><button role="tab" aria-selected="false" data-m="m4">Module 4</button><button role="tab" aria-selected="false" data-m="m5">Module 5</button></nav>
+
+<section id="m3">
+<details open><summary><span class="q">Q5a</span>P-value in hypothesis testing: what it is, why it matters, how to interpret it</summary>
+<h3>Definition</h3>
+<p>The <b>p-value</b> is the probability of getting a result at least as extreme as the one we observed, <b>assuming the null hypothesis (H₀) is true</b>. H₀ is the “nothing special is happening” claim.</p>
+<svg viewBox="0 0 300 130" width="300" role="img" aria-label="Bell curve with the right tail shaded as the p-value"><path d="M20 105 C70 105 90 20 150 20 S230 105 280 105 Z" fill="none" stroke="currentColor"/><path d="M200 105 L200 62 C215 80 245 105 280 105 Z" fill="#b3261e" opacity=".7"/><line x1="200" y1="105" x2="200" y2="55" stroke="currentColor" stroke-dasharray="3"/><text x="150" y="122" text-anchor="middle">Curve if H₀ is true</text><text x="238" y="55" text-anchor="middle">Shaded area = p-value</text><text x="200" y="48" text-anchor="middle">Our result</text></svg>
+<p class="f">Fig: P-value is the shaded tail area</p>
+<h3>Importance</h3>
+<ul><li>Tells us whether the result is likely just due to chance.</li><li>Gives a simple rule for decision: compare p with the significance level α (usually 0.05).</li><li>Used in every test: t-test, chi-square, ANOVA, regression coefficients.</li></ul>
+<h3>Interpretation</h3>
+<div class="t"><table><tr><th>p-value</th><th>Meaning</th></tr><tr><td>p ≤ 0.01</td><td>Very strong evidence against H₀</td></tr><tr><td>0.01 &lt; p ≤ 0.05</td><td>Reject H₀ (significant)</td></tr><tr><td>p &gt; 0.05</td><td>Not enough evidence; fail to reject H₀</td></tr></table></div>
+<p><b>Rule:</b> if p &lt; α, reject H₀; otherwise, fail to reject H₀.</p>
+<div class="ex"><b>Example:</b> A company says its battery lasts 10 hours (H₀). We test 30 batteries and get p = 0.02. Since 0.02 &lt; 0.05, we reject H₀: the battery life is probably not 10 hours.</div>
+<h3>Common mistakes</h3>
+<p>The p-value is <b>not</b> the probability that H₀ is true, and a small p-value does not mean the effect is large or important.</p>
+</details>
+
+<details open><summary><span class="q">Q5b</span>Step-by-step procedure for a two-sample t-test</summary>
+<p>A <b>two-sample t-test</b> checks whether the means of two independent groups are really different.</p>
+<ol>
+<li><b>State hypotheses.</b> H₀: μ₁ = μ₂ (no difference). H₁: μ₁ ≠ μ₂ (two-tailed) or μ₁ &gt; μ₂ / μ₁ &lt; μ₂ (one-tailed).</li>
+<li><b>Choose the significance level</b> α, usually 0.05.</li>
+<li><b>Check assumptions:</b> the two groups are independent, data is roughly normal in each group, and variances are similar (if not, use Welch’s test).</li>
+<li><b>Collect data</b> and find n₁, n₂, means x̄₁, x̄₂ and standard deviations s₁, s₂.</li>
+<li><b>Calculate the test statistic:</b><br>t = (x̄₁ − x̄₂) / √(s₁²/n₁ + s₂²/n₂)</li>
+<li><b>Find degrees of freedom:</b> df = n₁ + n₂ − 2 (pooled test).</li>
+<li><b>Get the critical value</b> from the t-table for α and df, or get the p-value.</li>
+<li><b>Decide:</b> if |t| &gt; critical value (or p &lt; α), reject H₀.</li>
+<li><b>Conclude</b> in plain words.</li></ol>
+<div class="ex"><b>Example:</b> Method A: n=10, mean 78, s=6. Method B: n=10, mean 72, s=5. SE = √(36/10 + 25/10) = √6.1 ≈ 2.47. t = 6/2.47 ≈ 2.43. df = 18, critical value (5%, two-tailed) ≈ 2.10. Since 2.43 &gt; 2.10, reject H₀: Method A gives significantly better marks.</div>
+</details>
+
+<details open><summary><span class="q">Q6a</span>Multiple testing problem, its effect on inference, and how it is corrected</summary>
+<h3>Meaning</h3>
+<p>When we run <b>many hypothesis tests on the same data</b>, the chance of getting at least one false positive (Type I error: rejecting a true H₀) keeps rising, even if each test uses α = 0.05.</p>
+<h3>Effect</h3>
+<p>For m independent tests: P(at least one false positive) = 1 − (1 − α)ᵐ.</p>
+<div class="t"><table><tr><th>No. of tests (m)</th><th>Chance of a false alarm</th></tr><tr><td>1</td><td>5%</td></tr><tr><td>10</td><td>40%</td></tr><tr><td>20</td><td>64%</td></tr></table></div>
+<div class="ex"><b>Example:</b> A researcher tests 20 genes for a link to a disease. Even if none is related, about 1 gene will look “significant” just by luck.</div>
+<h3>Corrections</h3>
+<ul>
+<li><b>Bonferroni:</b> use α/m for each test. For 20 tests, α = 0.05/20 = 0.0025. Simple but strict.</li>
+<li><b>Holm’s method:</b> sort p-values from smallest; compare the smallest with α/m, the next with α/(m−1), and so on. Stop at the first failure. Less strict than Bonferroni.</li>
+<li><b>False Discovery Rate (Benjamini–Hochberg):</b> controls the expected share of false discoveries among the rejected tests. Used when m is very large (genomics, ML feature selection).</li></ul>
+<p>Other remedies: plan fewer tests in advance and use ANOVA (one overall test) instead of many pairwise t-tests.</p>
+</details>
+
+<details open><summary><span class="q">Q6b</span>Role of degrees of freedom in t-tests and other inferential statistics</summary>
+<h3>Definition</h3>
+<p><b>Degrees of freedom (df)</b> is the number of values in a calculation that are free to vary.</p>
+<div class="ex"><b>Example:</b> Five numbers must have mean 10, so their sum is 50. We can pick any 4 numbers freely, but the fifth is then fixed. So df = 5 − 1 = 4.</div>
+<h3>Formulas</h3>
+<div class="t"><table><tr><th>Test</th><th>df</th></tr><tr><td>One-sample t-test</td><td>n − 1</td></tr><tr><td>Two-sample t-test (pooled)</td><td>n₁ + n₂ − 2</td></tr><tr><td>Chi-square test (table r × c)</td><td>(r − 1)(c − 1)</td></tr><tr><td>Regression with k predictors</td><td>n − k − 1</td></tr></table></div>
+<h3>Role</h3>
+<ul><li>df decides the <b>shape of the t-distribution</b>. Small df gives fat tails, which means more uncertainty.</li><li>It sets the <b>critical value</b>. As df grows, the t-distribution becomes the normal distribution.</li><li>Used to compute p-values, confidence intervals, and the unbiased variance (dividing by n − 1).</li></ul>
+<div class="t"><table><tr><th>df</th><th>5</th><th>10</th><th>30</th><th>Very large</th></tr><tr><td>t critical (5%, two-tailed)</td><td>2.571</td><td>2.228</td><td>2.042</td><td>1.96</td></tr></table></div>
+<p>Fewer df means a larger critical value, so stronger evidence is needed to reject H₀.</p>
+</details>
+</section>
+
+<section id="m4" hidden>
+<details open><summary><span class="q">Q7a</span>Factor (categorical) variables in regression and how they are handled</summary>
+<h3>Definition</h3>
+<p>A <b>factor variable</b> is a categorical variable that takes a limited set of labels (levels), such as City = Bengaluru, Mysuru, Mangaluru. Regression needs numbers, so factors must be converted.</p>
+<h3>Handling: dummy (indicator) variables</h3>
+<ol><li>Pick one level as the <b>reference level</b>.</li><li>Make one 0/1 variable for each remaining level. A factor with k levels gives <b>k − 1</b> dummy variables.</li><li>Use these dummies as predictors.</li></ol>
+<div class="t"><table><tr><th>City</th><th>Mysuru</th><th>Mangaluru</th></tr><tr><td>Bengaluru (reference)</td><td>0</td><td>0</td></tr><tr><td>Mysuru</td><td>1</td><td>0</td></tr><tr><td>Mangaluru</td><td>0</td><td>1</td></tr></table></div>
+<p>Model: Price = β₀ + β₁(Mysuru) + β₂(Mangaluru). Here β₀ is the average price in Bengaluru, and β₁ is how much Mysuru differs from Bengaluru.</p>
+<h3>Dummy variable trap</h3>
+<p>If we make k dummies, they add up to 1 and copy the intercept. This causes perfect multicollinearity (predictors that repeat each other), and the model cannot be solved. So we drop one.</p>
+<h3>Other types</h3>
+<ul><li><b>Ordered factors</b> (Low &lt; Medium &lt; High) can be coded 1, 2, 3 if gaps are similar.</li><li>Methods: one-hot encoding, treatment coding (above), effect coding.</li></ul>
+</details>
+
+<details open><summary><span class="q">Q7b</span>Regression diagnostics and how they improve model quality</summary>
+<p><b>Regression diagnostics</b> are checks that tell us whether the model’s assumptions hold and whether some data points are misleading it.</p>
+<div class="t"><table><tr><th>Technique</th><th>What it checks</th><th>Fix if problem found</th></tr>
+<tr><td>Residual vs fitted plot</td><td>Straight-line fit and equal spread (homoscedasticity)</td><td>Transform y (log), add squared terms, weighted regression</td></tr>
+<tr><td>Q-Q plot of residuals</td><td>Residuals are normal</td><td>Transform data, handle outliers</td></tr>
+<tr><td>Standardised residuals</td><td>Outliers (value beyond ±3)</td><td>Check data entry; remove or treat</td></tr>
+<tr><td>Leverage and Cook’s distance</td><td>Influential points that pull the line</td><td>Examine; fit with and without them</td></tr>
+<tr><td>VIF (variance inflation factor)</td><td>Multicollinearity (VIF above 5–10 is bad)</td><td>Drop or combine correlated predictors</td></tr>
+<tr><td>Durbin–Watson test</td><td>Correlated errors (time data)</td><td>Add lag terms, time-series model</td></tr></table></div>
+<div class="ex"><b>Example:</b> In a house-price model, the residual plot fans out as price increases (unequal spread). Taking log(price) makes the spread even and improves the fit.</div>
+<h3>Benefit</h3>
+<p>Diagnostics give more reliable coefficients, correct p-values and confidence intervals, and better predictions on new data.</p>
+</details>
+
+<details open><summary><span class="q">Q8a</span>Interpreting a regression equation with continuous and factor variables</summary>
+<p>Take the model: <b>Salary = 20 + 3·Experience + 5·Master</b></p>
+<p>Salary is in ₹ thousand per month. Experience (continuous) is in years. Master is a dummy: 1 if the person has a Master’s degree, 0 if Bachelor’s (reference level).</p>
+<h3>Interpretation</h3>
+<ul><li><b>Intercept (20):</b> expected salary of a Bachelor’s holder with 0 years of experience.</li><li><b>Experience coefficient (3):</b> each extra year adds ₹3 thousand, <b>keeping degree fixed</b>.</li><li><b>Master coefficient (5):</b> at the same experience, a Master’s holder earns ₹5 thousand more than a Bachelor’s holder.</li></ul>
+<div class="t"><table><tr><th>Group</th><th>Equation</th></tr><tr><td>Bachelor’s (Master = 0)</td><td>Salary = 20 + 3·Exp</td></tr><tr><td>Master’s (Master = 1)</td><td>Salary = 25 + 3·Exp</td></tr></table></div>
+<svg viewBox="0 0 280 150" width="280" role="img" aria-label="Two parallel lines for Bachelor and Master"><line x1="30" y1="120" x2="30" y2="15" stroke="currentColor"/><line x1="30" y1="120" x2="260" y2="120" stroke="currentColor"/><line x1="30" y1="100" x2="250" y2="40" stroke="currentColor"/><line x1="30" y1="82" x2="250" y2="22" stroke="#b3261e"/><text x="255" y="48">Bachelor’s</text><text x="255" y="26" style="fill:#b3261e">Master’s</text><text x="145" y="140" text-anchor="middle">Experience (years)</text><text x="8" y="14">Salary</text></svg>
+<p class="f">Fig: Same slope, shifted by the factor’s coefficient</p>
+<div class="ex"><b>Example:</b> A Master’s holder with 4 years of experience: 20 + 3(4) + 5 = ₹37 thousand.</div>
+<p>The lines are parallel, meaning the effect of experience is assumed to be the same for both degrees.</p>
+</details>
+
+<details open><summary><span class="q">Q8b</span>Spline regression, difference from polynomial regression, advantages</summary>
+<h3>Spline regression</h3>
+<p>The x-axis is divided into pieces at points called <b>knots</b>. In each piece we fit a low-degree polynomial (usually cubic), and the pieces are joined smoothly so the whole curve is continuous, with matching slope and curvature at every knot.</p>
+<div class="ex"><b>Example:</b> House price against age. Price falls fast for the first 10 years, stays flat in the middle, and rises for heritage homes. A spline with knots at 10 and 60 years follows this naturally.</div>
+<h3>Polynomial regression</h3>
+<p>Fits <b>one</b> equation to all the data: y = β₀ + β₁x + β₂x² + … + βₖxᵏ.</p>
+<h3>Difference</h3>
+<div class="t"><table><tr><th>Polynomial</th><th>Spline</th></tr><tr><td>One global curve</td><td>Separate low-degree pieces joined at knots</td></tr><tr><td>A change in one region affects the whole curve</td><td>Each region is fitted mostly by its own nearby data</td></tr><tr><td>High degree wiggles badly at the ends</td><td>Stable at the ends</td></tr><tr><td>Flexibility is set by degree</td><td>Flexibility is set by number of knots</td></tr></table></div>
+<h3>Advantages of splines</h3>
+<ul><li>Flexible: can fit complex, non-linear patterns.</li><li>Local control, so a few odd points do not distort the entire curve.</li><li>Avoids the wild swings of high-degree polynomials.</li><li>Natural splines are straight beyond the end knots, so predictions there are safer.</li><li>Still a linear model, so ordinary least squares and the usual tests work.</li></ul>
+</details>
+</section>
+
+<section id="m5" hidden>
+<details open><summary><span class="q">Q9a</span>Covariance matrix, importance in discriminant analysis, effect on classification boundaries</summary>
+<h3>Definition</h3>
+<p>For p variables, the <b>covariance matrix Σ</b> is a p × p table. The diagonal holds each variable’s <b>variance</b> (spread). The other cells hold <b>covariances</b> (how two variables move together). It is symmetric.</p>
+<div class="ex"><b>Example</b> (Height, Weight): Σ = [ 25 &nbsp; 30 ; 30 &nbsp; 64 ]. Variance of height = 25, of weight = 64, and the positive covariance 30 means taller people tend to be heavier.</div>
+<h3>Importance in Discriminant Analysis</h3>
+<ul><li>LDA assumes every class is normally distributed with its <b>own mean μₖ but a common Σ</b>.</li><li>Discriminant function: δₖ(x) = xᵀΣ⁻¹μₖ − ½ μₖᵀΣ⁻¹μₖ + ln πₖ. A point goes to the class with the largest δₖ.</li><li>Σ⁻¹ takes care of different scales and correlations between variables. This is the idea behind Mahalanobis distance.</li></ul>
+<h3>Effect on boundaries</h3>
+<ul><li><b>Same Σ for all classes (LDA):</b> the boundary is a <b>straight line</b> (a plane in higher dimensions).</li><li><b>Different Σₖ per class (QDA):</b> the boundary is <b>curved</b> (quadratic).</li><li>Larger covariance between variables tilts the data cloud, so the boundary tilts with it.</li></ul>
+<svg viewBox="0 0 300 150" width="300" role="img" aria-label="Two tilted ellipses separated by a straight line"><ellipse cx="95" cy="75" rx="55" ry="22" transform="rotate(-30 95 75)" fill="none" stroke="currentColor"/><ellipse cx="205" cy="75" rx="55" ry="22" transform="rotate(-30 205 75)" fill="none" stroke="#b3261e"/><line x1="150" y1="10" x2="150" y2="140" stroke="currentColor" stroke-dasharray="4"/><text x="80" y="140">Class 1</text><text x="205" y="140" style="fill:#b3261e">Class 2</text></svg>
+<p class="f">Fig: Equal covariance gives a straight boundary (LDA)</p>
+</details>
+
+<details open><summary><span class="q">Q9b</span>Interpreting coefficients and odds ratios in logistic regression, with example</summary>
+<p>Logistic regression predicts the probability p of a yes/no outcome. Its model is:<br><b>ln( p / (1 − p) ) = β₀ + β₁x</b></p>
+<p><b>Odds</b> = p/(1 − p), i.e. chance of happening vs not happening. ln(odds) is called the <b>log-odds</b>.</p>
+<h3>Interpretation</h3>
+<ul><li><b>Coefficient β₁:</b> change in log-odds when x increases by 1 unit. Positive β means higher chance; negative means lower chance.</li><li><b>Odds ratio = e^β₁:</b> the number by which the odds are multiplied for each 1-unit increase in x.</li></ul>
+<div class="t"><table><tr><th>Odds ratio</th><th>Meaning</th></tr><tr><td>&gt; 1</td><td>Odds increase</td></tr><tr><td>= 1</td><td>No effect</td></tr><tr><td>&lt; 1</td><td>Odds decrease</td></tr></table></div>
+<div class="ex"><b>Example:</b> Pass or fail against study hours: ln(odds) = −4 + 0.8·hours.<br>β₁ = 0.8, so odds ratio = e^0.8 ≈ 2.23. Each extra hour of study more than doubles the odds of passing.<br>At 5 hours: log-odds = 0, so p = 0.5. At 6 hours: log-odds = 0.8, so p = 1/(1 + e^−0.8) ≈ 0.69.</div>
+<p><b>Note:</b> the coefficient changes the odds by a fixed multiple, not the probability by a fixed amount.</p>
+</details>
+
+<details open><summary><span class="q">Q10a</span>Precision, Recall, F1-score and why they matter for imbalanced datasets</summary>
+<h3>Confusion matrix</h3>
+<div class="t"><table><tr><th></th><th>Predicted Positive</th><th>Predicted Negative</th></tr><tr><th>Actual Positive</th><td>TP (true positive)</td><td>FN (false negative)</td></tr><tr><th>Actual Negative</th><td>FP (false positive)</td><td>TN (true negative)</td></tr></table></div>
+<ul><li><b>Precision</b> = TP / (TP + FP). Of all predicted positives, how many are correct.</li><li><b>Recall</b> = TP / (TP + FN). Of all real positives, how many we caught.</li><li><b>F1-score</b> = 2 × (Precision × Recall) / (Precision + Recall). The harmonic mean, which is high only when both are high.</li></ul>
+<div class="ex"><b>Example (fraud detection):</b> 1000 transactions, 20 are fraud. The model catches 12 and wrongly flags 4 genuine ones: TP = 12, FP = 4, FN = 8, TN = 976.<br>Precision = 12/16 = 0.75. Recall = 12/20 = 0.60. F1 = 2(0.75)(0.60)/1.35 ≈ 0.67. Accuracy = 988/1000 = 98.8%.</div>
+<h3>Why crucial for imbalanced data</h3>
+<p>Accuracy is misleading when one class is rare. A useless model that says “genuine” every time scores 980/1000 = 98% accuracy but catches <b>zero</b> frauds (recall = 0). Precision and recall focus on the rare class we really care about, and F1 combines them in one number.</p>
+<p>Use <b>recall</b> when missing a positive is costly (cancer, fraud). Use <b>precision</b> when false alarms are costly (spam filter).</p>
+</details>
+
+<details open><summary><span class="q">Q10b</span>ROC curve and how it is used to evaluate classifiers</summary>
+<h3>Definition</h3>
+<p>The <b>ROC (Receiver Operating Characteristic) curve</b> plots the <b>True Positive Rate</b> against the <b>False Positive Rate</b> at every possible decision threshold.</p>
+<ul><li>TPR (recall) = TP / (TP + FN)</li><li>FPR = FP / (FP + TN)</li></ul>
+<svg viewBox="0 0 280 230" width="280" role="img" aria-label="ROC curves for a good classifier, a weaker one and random guessing"><line x1="40" y1="190" x2="40" y2="15" stroke="currentColor"/><line x1="40" y1="190" x2="250" y2="190" stroke="currentColor"/><line x1="40" y1="190" x2="250" y2="15" stroke="currentColor" stroke-dasharray="4" opacity=".6"/><path d="M40 190 C50 80 90 30 250 15" fill="none" stroke="#b3261e" stroke-width="2"/><path d="M40 190 C80 120 150 60 250 15" fill="none" stroke="currentColor" stroke-width="2"/><text x="145" y="215" text-anchor="middle">False Positive Rate</text><text x="4" y="12">True Positive Rate</text><text x="100" y="45" style="fill:#b3261e">Model A (better)</text><text x="160" y="110">Model B</text><text x="170" y="150" opacity=".8">Random guess</text></svg>
+<p class="f">Fig: ROC curves</p>
+<h3>How it is read</h3>
+<ul><li>Each point on the curve is one threshold. Lowering the threshold catches more positives (TPR up) but gives more false alarms (FPR up).</li><li><b>Top-left corner</b> = perfect classifier. <b>Diagonal line</b> = random guessing.</li><li>A curve closer to the top-left is better.</li></ul>
+<h3>AUC (Area Under the Curve)</h3>
+<p>One number to summarise the curve: AUC = 1 is perfect, 0.5 is random, and above 0.8 is generally good.</p>
+<h3>Uses</h3>
+<ul><li>Compare different classifiers (the higher AUC wins).</li><li>Choose the best threshold for the problem’s needs.</li><li>Works independently of the class balance and of one fixed threshold.</li></ul>
+</details>
+</section>
+
+<script>
+(function(){
+var tabs=document.querySelectorAll("nav button");
+tabs.forEach(function(b){b.addEventListener("click",function(){
+tabs.forEach(function(x){x.setAttribute("aria-selected",x===b?"true":"false");document.getElementById(x.dataset.m).hidden=x!==b;});
+});});
+})();
+</script>
+</main></body></html>
